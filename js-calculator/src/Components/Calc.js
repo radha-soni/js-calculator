@@ -11,43 +11,53 @@ class Calc extends Component {
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.clearInput = this.clearInput.bind(this);
     this.handleResult = this.handleResult.bind(this);
+    this.handleBackClick = this.handleBackClick.bind(this);
   }
 
   handleButtonClick(val) {
+    if (this.state.showResult) {
+      this.setState({
+        value: [],
+        result: 0,
+        showResult: false
+      });
+    }
     if (this.state.value.length > 22) {
       this.setState({
         value: "DATA LIMIT EXCEEDED"
       });
     } else {
+      if (
+        this.state.value[this.state.value.length - 1] &&
+        this.state.value[this.state.value.length - 1].match(/\D/) &&
+        val.match(/\D/)
+      ) {
+        this.state.value.pop();
+      }
       this.setState(state => {
-        let value = state.value.push(val);
-        // let updatedValue;
-        // let regex = /(\+|-|\*|\/)/g ;
-        // if (state.value[state.value.lastIndexOf("/") === val]) {
-        //   console.log(state.value.lastIndexOf("/"));
-        //   state.value.pop();
-        //   updatedValue = state.value.push(val);
-        // }
+        const value = state.value.concat(val);
         return {
           value
         };
       });
     }
   }
+  handleBackClick() {
+    this.setState(state => {
+      state.value.pop();
+      return { value: state.value };
+    });
+  }
 
   clearInput() {
     this.setState({
       showResult: false,
-      value: ""
+      value: []
     });
   }
   handleResult() {
-    // let pattern = /^\d+|\d+$/g;
     let myString = this.state.value.join("");
-    console.log(myString);
-    // if (myString.length === 0) {
-    //   return;
-    // }
+
     myString = myString.replace(/(\+|-|\*|\/)/g, " $1 ").split(" ");
     var result;
     for (let i = 1; i < myString.length; i++) {
@@ -219,6 +229,15 @@ class Calc extends Component {
                 id="decimal"
               >
                 .
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={() => this.handleBackClick()}
+                className="back-btn"
+                id="back"
+              >
+                BACK
               </button>
             </div>
           </div>

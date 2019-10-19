@@ -74,6 +74,21 @@ button:hover {
   border: 0.5px solid white;
   color: black;
 }
+#back {
+  width: 320px;
+  height: 65px;
+  font-size: 20px;
+  font-family: monospace;
+  font-weight: 600;
+  border: 0.15px solid black;
+  background: rgb(172, 57, 57);
+  color: white;
+  outline: none;
+}
+#back:hover {
+  border: 0.5px solid white;
+  color: black;
+}
 #zero {
   width: 160px;
   height: 65px;
