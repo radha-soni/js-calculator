@@ -4,7 +4,7 @@ class Calc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "",
+      value: [],
       result: 0,
       showResult: false
     };
@@ -14,14 +14,20 @@ class Calc extends Component {
   }
 
   handleButtonClick(val) {
-    const arrLength = this.state.value.length;
-    if (arrLength > 22) {
+    if (this.state.value.length > 22) {
       this.setState({
         value: "DATA LIMIT EXCEEDED"
       });
     } else {
       this.setState(state => {
-        const value = state.value.concat(val);
+        let value = state.value.push(val);
+        // let updatedValue;
+        // let regex = /(\+|-|\*|\/)/g ;
+        // if (state.value[state.value.lastIndexOf("/") === val]) {
+        //   console.log(state.value.lastIndexOf("/"));
+        //   state.value.pop();
+        //   updatedValue = state.value.push(val);
+        // }
         return {
           value
         };
@@ -36,56 +42,58 @@ class Calc extends Component {
     });
   }
   handleResult() {
-    let myString = this.state.value;
-    let pattern = /^\d+|\d+$/g;
+    // let pattern = /^\d+|\d+$/g;
+    let myString = this.state.value.join("");
+    console.log(myString);
+    // if (myString.length === 0) {
+    //   return;
+    // }
     myString = myString.replace(/(\+|-|\*|\/)/g, " $1 ").split(" ");
-    if (myString.length !== 0 && pattern.test(myString)) {
-      var result;
-      for (let i = 1; i < myString.length; i++) {
-        if (myString.includes("/")) {
-          let index = myString.indexOf("/");
-          let left = myString[index - 1];
-          let right = myString[index + 1];
-          result = Number(left) / Number(right);
-          myString.splice(index - 1, 3, result);
-          i = 1;
-        }
+    var result;
+    for (let i = 1; i < myString.length; i++) {
+      if (myString.includes("/")) {
+        let index = myString.indexOf("/");
+        let left = myString[index - 1];
+        let right = myString[index + 1];
+        result = Number(left) / Number(right);
+        myString.splice(index - 1, 3, result);
+        i = index;
       }
-      for (let i = 1; i < myString.length; i++) {
-        if (myString.includes("*")) {
-          let index = myString.indexOf("*");
-          let left = myString[index - 1];
-          let right = myString[index + 1];
-          result = Number(left) * Number(right);
-          myString.splice(index - 1, 3, result);
-          i = 1;
-        }
-      }
-      for (let i = 1; i < myString.length; i++) {
-        if (myString.includes("+")) {
-          let index = myString.indexOf("+");
-          let left = myString[index - 1];
-          let right = myString[index + 1];
-          result = Number(left) + Number(right);
-          myString.splice(index - 1, 3, result);
-          i = 1;
-        }
-      }
-      for (let i = 1; i < myString.length; i++) {
-        if (myString.includes("-")) {
-          let index = myString.indexOf("-");
-          let left = myString[index - 1];
-          let right = myString[index + 1];
-          result = Number(left) - Number(right);
-          myString.splice(index - 1, 3, result);
-          i = 1;
-        }
-      }
-      this.setState({
-        result,
-        showResult: true
-      });
     }
+    for (let i = 1; i < myString.length; i++) {
+      if (myString.includes("*")) {
+        let index = myString.indexOf("*");
+        let left = myString[index - 1];
+        let right = myString[index + 1];
+        result = Number(left) * Number(right);
+        myString.splice(index - 1, 3, result);
+        i = index;
+      }
+    }
+    for (let i = 1; i < myString.length; i++) {
+      if (myString.includes("+")) {
+        let index = myString.indexOf("+");
+        let left = myString[index - 1];
+        let right = myString[index + 1];
+        result = Number(left) + Number(right);
+        myString.splice(index - 1, 3, result);
+        i = index;
+      }
+    }
+    for (let i = 1; i < myString.length; i++) {
+      if (myString.includes("-")) {
+        let index = myString.indexOf("-");
+        let left = myString[index - 1];
+        let right = myString[index + 1];
+        result = Number(left) - Number(right);
+        myString.splice(index - 1, 3, result);
+        i = index;
+      }
+    }
+    this.setState({
+      result,
+      showResult: true
+    });
   }
 
   render() {
